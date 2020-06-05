@@ -25,15 +25,12 @@ use std::{
     sync::{Arc, Mutex},
 };
 
-use futures_util::{
-    future, pin_mut,
-    stream::TryStreamExt,
-    StreamExt,
-};
+use futures::{pin_mut, Future};
 use futures_channel::mpsc::{unbounded, UnboundedSender};
 
 use tokio::net::{TcpListener, TcpStream};
 use tungstenite::protocol::Message;
+use futures::{TryStreamExt, StreamExt, future};
 
 type Tx = UnboundedSender<Message>;
 type PeerMap = Arc<Mutex<HashMap<SocketAddr, Tx>>>;
@@ -84,6 +81,10 @@ async fn handle_connection(peer_map: PeerMap, raw_stream: TcpStream, addr: Socke
 
 #[tokio::main]
 async fn main() -> Result<(), IoError> {
+    some_fn()
+}
+
+async fn some_fn() -> Result<(), IoError> {
     let addr = env::args()
         .nth(1)
         .unwrap_or_else(|| "127.0.0.1:8080".to_string());
